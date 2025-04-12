@@ -1,2 +1,5 @@
 // Instead of @import, use @use for better modularity and compatibility
 @use 'bootstrap/scss/bootstrap' as *;
+body {
+  background-color: #f3f5f6;
+}

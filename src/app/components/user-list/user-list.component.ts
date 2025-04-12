@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {Observable, take, debounceTime, distinctUntilChanged, Subject} from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
-
 
 @Component({
   selector: 'app-user-list',
@@ -14,7 +13,8 @@ import { isPlatformBrowser } from '@angular/common';
     NgIf,
     FormsModule,
     DatePipe,
-    NgForOf
+    NgForOf,
+    NgClass
   ],
   styleUrls: ['./user-list.component.scss']
 })
@@ -40,6 +40,8 @@ export class UserListComponent implements OnInit {
   private editUserModal: any;
   private searchSubject = new Subject<string>();
   hasUsers: boolean = false;
+  sortColumn: string = 'name';
+  sortDirection: string = 'asc';
 
   constructor(
     private userService: UserService,
@@ -61,6 +63,7 @@ export class UserListComponent implements OnInit {
     this.users$.subscribe(users => {
       this.filteredUsers = [...users];
       this.hasUsers = this.filteredUsers.length > 0;
+      this.sort(this.sortColumn);
     });
   }
 
@@ -129,11 +132,13 @@ export class UserListComponent implements OnInit {
       alert(errorMessage);
     }
   }
+
   applyFilter(): void {
     this.users$?.pipe(take(1)).subscribe(users => {
       if (!this.searchTerm) {
         this.filteredUsers = [...users];
         this.hasUsers = this.filteredUsers.length > 0;
+        this.sort(this.sortColumn);
         return;
       }
 
@@ -143,6 +148,29 @@ export class UserListComponent implements OnInit {
         (user.role && user.role.toLowerCase().includes(term))
       );
       this.hasUsers = this.filteredUsers.length > 0 || !!this.searchTerm;
+      this.sort(this.sortColumn);
+    });
+  }
+
+  sort(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.filteredUsers.sort((a, b) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      if (valueA < valueB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+      return 0;
     });
   }
 }
