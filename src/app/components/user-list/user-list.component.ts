@@ -36,8 +36,8 @@ export class UserListComponent implements OnInit {
     role: '',
     enabled: true
   };
-  private addUserModal: any;
-  private editUserModal: any;
+  public addUserModal: any;
+  public editUserModal: any;
   private searchSubject = new Subject<string>();
   hasUsers: boolean = false;
   sortColumn: string = 'name';
@@ -58,7 +58,7 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  private loadUsers(): void {
+  loadUsers(): void {
     this.users$ = this.userService.getUsers();
     this.users$.subscribe(users => {
       this.filteredUsers = [...users];
