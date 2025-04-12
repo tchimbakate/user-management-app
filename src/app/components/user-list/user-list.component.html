@@ -27,7 +27,7 @@
             <thead>
             <tr>
                 <th scope="col" (click)="sort('name')" class="sortable" aria-label="Sort by name">
-                    Name
+                    Username
                     <i
                             class="fas fa-sort ms-1"
                             [ngClass]="{
@@ -136,7 +136,7 @@
             <div class="modal-body">
                 <form (ngSubmit)="onAddUserSubmit()">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Username</label>
                         <input
                                 type="text"
                                 class="form-control"
@@ -194,7 +194,7 @@
             <div class="modal-body">
                 <form (ngSubmit)="onEditUserSubmit()">
                     <div class="mb-3">
-                        <label for="editName" class="form-label">Name</label>
+                        <label for="editName" class="form-label">Username</label>
                         <input
                                 type="text"
                                 class="form-control"
