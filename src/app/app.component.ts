@@ -17,7 +17,7 @@ import {UserListComponent} from "./components/user-list/user-list.component";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'my-angular-firebase-app';
+  title = 'user-management-app';
 
   constructor() {
     AngularFireModule.initializeApp(environment.firebaseConfig);
