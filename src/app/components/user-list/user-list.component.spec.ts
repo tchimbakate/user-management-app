@@ -53,7 +53,7 @@ describe('UserListComponent', () => {
   it('should apply filter based on search term', fakeAsync(() => {
     component.searchTerm = 'john';
     component.onSearchInput();
-    tick(300); // debounce time
+    tick(300);
     expect(component.filteredUsers.length).toBe(1);
     expect(component.filteredUsers[0].name).toBe('John Doe');
   }));
@@ -63,7 +63,6 @@ describe('UserListComponent', () => {
     expect(component.sortColumn).toBe('name');
     expect(component.sortDirection).toBe('asc');
     expect(component.filteredUsers[0].name).toBe('Jane Smith');
-
     component.sort('name');
     expect(component.sortDirection).toBe('desc');
     expect(component.filteredUsers[0].name).toBe('John Doe');
@@ -75,7 +74,7 @@ describe('UserListComponent', () => {
     expect(component.newUser).toEqual({ name: '', role: '', enabled: true });
   });
 
-  it('should open edit user modal ', async () => {
+  it('should open edit user modal', async () => {
     spyOn(component, 'openEditUserModal').and.callThrough();
     await component.openEditUserModal(mockUsers[0]);
     expect(component.editedUser).toEqual(mockUsers[0]);
@@ -127,5 +126,4 @@ describe('UserListComponent', () => {
     tick(300);
     expect(component.filteredUsers.length).toBe(2);
   }));
-
 });

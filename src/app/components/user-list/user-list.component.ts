@@ -53,7 +53,7 @@ export class UserListComponent implements OnInit {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
-    ).subscribe(searchTerm => {
+    ).subscribe(() => {
       this.applyFilter();
     });
   }
