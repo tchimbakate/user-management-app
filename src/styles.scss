@@ -1,1 +1,2 @@
-/* You can add global styles to this file, and also import other style files */
+// Instead of @import, use @use for better modularity and compatibility
+@use 'bootstrap/scss/bootstrap' as *;

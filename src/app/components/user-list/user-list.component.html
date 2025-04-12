@@ -1,0 +1,119 @@
+<div class="user-list-container container mt-5">
+
+
+  <div class="user-actions d-flex mb-3" [class.justify-content-between]="hasUsers" [class.justify-content-end]="!hasUsers">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search by name or role..."
+      class="form-control w-50"
+      (input)="onSearchInput()"
+    />
+    <button class="btn btn-success" (click)="openAddUserModal()">Add New User</button>
+  </div>
+
+  <div class="table-container">
+    <table *ngIf="filteredUsers.length > 0" class="table table-striped">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Created</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.name }}</td>
+        <td>{{ user.role }}</td>
+        <td>{{ user.createdAt | date:'medium' }}</td>
+        <td>
+            <span [class.text-success]="user.enabled" [class.text-danger]="!user.enabled">
+              {{ user.enabled ? 'Active' : 'Inactive' }}
+            </span>
+        </td>
+        <td class="actions">
+          <button (click)="openEditUserModal(user)" class="btn btn-warning btn-sm">Edit</button>
+          <button (click)="toggleUserStatus(user)" class="btn btn-info btn-sm">
+            {{ user.enabled ? 'Disable' : 'Enable' }}
+          </button>
+          <button (click)="deleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="filteredUsers.length === 0" class="alert alert-info">
+      <p>No users found. Click "Add New User" to create one.</p>
+    </div>
+  </div>
+
+  <div #addUserModal class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #addUserForm="ngForm" (ngSubmit)="onAddUserSubmit()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newUser.name" required>
+            </div>
+            <div class="mb-3">
+              <label for="role" class="form-label">Role</label>
+              <select class="form-select" id="role" name="role" [(ngModel)]="newUser.role" required>
+                <option value="">Select Role</option>
+                <option value="Admin">Admin</option>
+                <option value="Editor">Editor</option>
+                <option value="Viewer">Viewer</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!addUserForm.valid">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div #editUserModal class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #editUserForm="ngForm" (ngSubmit)="onEditUserSubmit()">
+            <div class="mb-3">
+              <label for="editName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="editName" name="name" [(ngModel)]="editedUser.name" required>
+            </div>
+            <div class="mb-3">
+              <label for="editRole" class="form-label">Role</label>
+              <select class="form-select" id="editRole" name="role" [(ngModel)]="editedUser.role" required>
+                <option value="">Select Role</option>
+                <option value="Admin">Admin</option>
+                <option value="Editor">Editor</option>
+                <option value="Viewer">Viewer</option>
+              </select>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="editEnabled" name="enabled" [(ngModel)]="editedUser.enabled">
+              <label class="form-check-label" for="editEnabled">Active</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!editUserForm.valid">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

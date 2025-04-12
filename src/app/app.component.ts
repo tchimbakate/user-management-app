@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
+import {UserListComponent} from './components/user-list/user-list.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [ NgIf, RouterLink, UserListComponent], // Importing necessary modules
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'user-management-app';
+  constructor(public router: Router) {}
 }
