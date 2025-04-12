@@ -49,7 +49,7 @@
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: darken(#47ad4c, 10%);
+        background-color: #3d9a42;
       }
     }
   }
@@ -58,10 +58,10 @@
     .table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 2rem;
       table-layout: fixed;
 
-      th, td {
+      th,
+      td {
         padding: 1rem;
         text-align: left;
       }
@@ -91,28 +91,17 @@
           border-radius: 4px;
           font-size: 0.875rem;
           font-weight: 500;
-          transition: background-color 0.3s;
-          white-space: nowrap;
-          border: none;
           color: white;
+          border: none;
+          transition: background-color 0.3s;
 
-          &.edit {
-            background-color: #47ad4c;
-
-          }
-
+          &.edit,
           &.toggle {
             background-color: #47ad4c;
-
-
           }
 
           &.delete {
             background-color: rgba(255, 68, 68, 0.59);
-
-            //&:hover {
-            //  background-color: darken(rgba(255, 68, 68, 0.59), 10%);
-            //}
           }
         }
       }
@@ -138,10 +127,6 @@
     }
   }
 
-  .alert {
-    margin-top: 1rem;
-  }
-
   #addUserButton {
     background-color: #47ad4c;
     border-radius: 25px;
@@ -149,42 +134,41 @@
     color: white;
     border: none;
     cursor: pointer;
-    font-family: 'Poppins',sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: bold;
+
+    &:hover {
+      background-color: #3d9a42;
+    }
   }
 
-  /* Optional: Add hover effect */
-  #addUserButton:hover {
-    background-color: #3d9a42;
-  }
   .form-check-input:checked {
     background-color: #3d9a42;
     border: none;
   }
 
-
   td {
     padding-left: 20px;
-    font-family: 'Roboto',sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 400;
-    margin-bottom: 32px;
     color: #54504d;
   }
+
   th {
     padding-left: 20px;
-    font-family: 'Poppins',sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 15px;
     color: #4e595f;
-  }
-  th:hover {
 
-    color: #3d9a42;
+    &:hover {
+      color: #3d9a42;
+    }
   }
+
   #title {
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
   }
-
 }

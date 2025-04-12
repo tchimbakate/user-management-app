@@ -4,9 +4,8 @@ import { UserService } from '../../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgForOf, NgClass } from '@angular/common';
 import { DatePipe } from '@angular/common';
-import { of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 import { PLATFORM_ID } from '@angular/core';
-import { Modal } from 'bootstrap';
 
 describe('UserListComponent', () => {
   let component: UserListComponent;

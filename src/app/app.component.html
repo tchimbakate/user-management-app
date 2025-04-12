@@ -1,17 +1,17 @@
 <header class="bg-white shadow-sm">
   <div class="container py-3">
     <div class="d-flex justify-content-between align-items-center">
-      <h2 class="text-dark mb-0" id="title">
-        <i class="fas fa-users-cog me-2"></i>Manage Users
-      </h2>
-      <nav class="d-flex align-items-center" disabled="true">
-        <a  class="btn  text-dark" >
+      <h1 class="text-dark mb-0" id="title">
+        <i class="fas fa-users-cog me-2"></i> Manage Users
+      </h1>
+      <nav class="d-flex align-items-center">
+        <a class="btn text-dark" aria-label="Home">
           <i class="fas fa-home me-1"></i>
         </a>
-        <a class="btn text-dark">
+        <a class="btn text-dark" aria-label="User Friends">
           <i class="fas fa-user-friends me-1"></i>
         </a>
-        <a routerLink="/settings" class="btn text-dark">
+        <a routerLink="/settings" class="btn text-dark" aria-label="Settings">
           <i class="fas fa-cog me-1"></i>
         </a>
       </nav>
@@ -20,8 +20,7 @@
 </header>
 
 <main>
-
-  <div class="user-management-container">
+  <section class="user-management-container">
     <app-user-list></app-user-list>
-  </div>
+  </section>
 </main>
