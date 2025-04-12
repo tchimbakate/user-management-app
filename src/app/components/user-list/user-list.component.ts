@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {Observable, take, debounceTime, distinctUntilChanged, Subject} from 'rxjs';
+import { Observable, take, debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -12,15 +12,16 @@ import { isPlatformBrowser } from '@angular/common';
   imports: [
     NgIf,
     FormsModule,
-    DatePipe,
     NgForOf,
     NgClass,
+    DatePipe,
   ],
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
   @ViewChild('addUserModal') addUserModalEl!: ElementRef;
   @ViewChild('editUserModal') editUserModalEl!: ElementRef;
+  @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
 
   users$: Observable<any[]> | undefined;
   searchTerm: string = '';
@@ -44,15 +45,16 @@ export class UserListComponent implements OnInit {
   sortDirection: string = 'asc';
 
   constructor(
-    private userService: UserService,
-    @Inject(PLATFORM_ID) private platformId: Object
+      private userService: UserService,
+      @Inject(PLATFORM_ID) private platformId: Object,
+      private renderer: Renderer2
   ) {}
 
   ngOnInit(): void {
     this.loadUsers();
     this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
+        debounceTime(300),
+        distinctUntilChanged()
     ).subscribe(() => {
       this.applyFilter();
     });
@@ -80,46 +82,56 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  async openEditUserModal(user: any): Promise<void> {
+  async openEditUserModal(user: any, event?: MouseEvent): Promise<void> {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     if (isPlatformBrowser(this.platformId)) {
       const { Modal } = await import('bootstrap');
       this.editedUser = { ...user };
       this.editUserModal = new Modal(this.editUserModalEl.nativeElement);
       this.editUserModal.show();
     }
+    this.closeDropdown();
   }
 
   onAddUserSubmit(): void {
     this.userService.addUser(this.newUser)
-      .then(() => {
-        if (this.addUserModal) {
-          this.addUserModal.hide();
-        }
-        this.newUser = { name: '', role: '', enabled: true };
-        this.loadUsers();
-      })
-      .catch(err => console.error('Error adding user:', err));
+        .then(() => {
+          if (this.addUserModal) {
+            this.addUserModal.hide();
+          }
+          this.newUser = { name: '', role: '', enabled: true };
+          this.loadUsers();
+        })
+        .catch(err => console.error('Error adding user:', err));
   }
 
   onEditUserSubmit(): void {
     this.userService.updateUser(this.editedUser.id, this.editedUser)
-      .then(() => {
-        if (this.editUserModal) {
-          this.editUserModal.hide();
-        }
-        this.loadUsers();
-      })
-      .catch(err => console.error('Error updating user:', err));
+        .then(() => {
+          if (this.editUserModal) {
+            this.editUserModal.hide();
+          }
+          this.loadUsers();
+        })
+        .catch(err => console.error('Error updating user:', err));
   }
 
   toggleUserStatus(user: any): void {
     const updatedStatus = !user.enabled;
     this.userService.updateUser(user.id, { enabled: updatedStatus })
-      .then(() => this.loadUsers())
-      .catch((err: any) => console.error('Error updating user status:', err));
+        .then(() => this.loadUsers())
+        .catch((err: any) => console.error('Error updating user status:', err));
   }
 
-  async deleteUser(user: any): Promise<void> {
+  async deleteUser(user: any, event?: MouseEvent): Promise<void> {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     if (!confirm('Are you sure you want to delete this user?')) return;
 
     try {
@@ -131,6 +143,7 @@ export class UserListComponent implements OnInit {
       const errorMessage = (err instanceof Error ? err.message : 'Unknown error') || 'Failed to delete user';
       alert(errorMessage);
     }
+    this.closeDropdown();
   }
 
   applyFilter(): void {
@@ -144,8 +157,8 @@ export class UserListComponent implements OnInit {
 
       const term = this.searchTerm.toLowerCase();
       this.filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(term) ||
-        (user.role && user.role.toLowerCase().includes(term))
+          user.name.toLowerCase().includes(term) ||
+          (user.role && user.role.toLowerCase().includes(term))
       );
       this.hasUsers = this.filteredUsers.length > 0 || !!this.searchTerm;
       this.sort(this.sortColumn);
@@ -172,5 +185,11 @@ export class UserListComponent implements OnInit {
       }
       return 0;
     });
+  }
+
+  closeDropdown(): void {
+    if (this.dropdownMenu) {
+      this.renderer.removeClass(this.dropdownMenu.nativeElement, 'show');
+    }
   }
 }
